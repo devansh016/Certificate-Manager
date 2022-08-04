@@ -7,6 +7,9 @@ app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: false }));
 
+const authRoutes = require("./routes/authRoutes");
+app.use("/auth", authRoutes);
+
 // Database Connection
 const connection = require("./utils/database");
 connection.on("error", console.error.bind(console, "connection error: "));
