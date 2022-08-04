@@ -31,10 +31,16 @@ userSchema.methods = {
     },
     generateToken: function() {
         return jwt.sign({ userID: this.userID }, process.env.JWT_SECRET, { expiresIn: '86400s' })
+    },
+    changePassword: function(newpassword) {
+        this.password = newpassword;
+        this.save();
     }
 }
+
 userSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
         this.password = bcrypt.hashSync(this.password, 12);
 })
+
 module.exports = mongoose.model('User', userSchema);

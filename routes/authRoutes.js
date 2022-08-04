@@ -4,6 +4,7 @@ const authController = require("../controllers/authControllers")
 
 router.post("/signin", signinUser);
 router.post("/signup", signupUser);
+router.post("/changePassword", authController.userVerification, changePassword);
 
 function signinUser(req, res, next){
     authController.authenticate(req.body)
@@ -14,6 +15,12 @@ function signinUser(req, res, next){
 
 function signupUser(req, res, next){
     authController.register(req.body)
+        .then( data => {
+            res.status(data.status).send(data);
+        })
+}
+function changePassword(req, res, next){
+    authController.changePassword(req.body)
         .then( data => {
             res.status(data.status).send(data);
         })
