@@ -10,6 +10,10 @@ app.use(express.urlencoded({ extended: false }));
 const authRoutes = require("./routes/authRoutes");
 app.use("/auth", authRoutes);
 
+const organizationRoutes = require("./routes/organizationRoutes");
+app.use("/organization", organizationRoutes);
+
+
 // Database Connection
 const connection = require("./utils/database");
 connection.on("error", console.error.bind(console, "connection error: "));
