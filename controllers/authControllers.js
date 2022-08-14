@@ -40,12 +40,17 @@ async function changePassword ({ userID, password, newpassword}){
 
 async function userVerification(req, res, next) {
     try {
-        var decoded = jwt.verify(req.body.token, process.env.JWT_SECRET);    
+        if(!req.headers.authorization){
+            res.status(401).send({"message": "No token found."});
+            return;
+        }
+        var authorization = req.headers.authorization.split(' ')[1],decoded;
+        var decoded = jwt.verify(authorization, process.env.JWT_SECRET);    
         req.body.userID = decoded.userID;
         if(req.body.userID){
             next();
         }else{
-            res.status(401).send("Unauthorized User.");
+            res.status(401).send({"message":"Unauthorized User."});
         }
     } catch(error) {
         res.status(400).send({"message": error.message});

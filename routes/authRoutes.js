@@ -4,7 +4,7 @@ const authController = require("../controllers/authControllers")
 
 router.post("/signin", signinUser);
 router.post("/signup", signupUser);
-router.post("/changePassword", authController.userVerification, changePassword);
+router.patch("/changePassword", authController.userVerification, changePassword);
 
 function signinUser(req, res, next){
     authController.authenticate(req.body)
