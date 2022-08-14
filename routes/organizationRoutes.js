@@ -3,9 +3,11 @@ const router = express.Router();
 const authController = require("../controllers/authControllers")
 const organizationControllers = require("../controllers/organizationControllers")
 
-router.post("/create", authController.userVerification, createOrganization);
-router.post("/delete", authController.userVerification, deleteOrganization);
-router.post("/get", authController.userVerification, getOrganization);
+router.post("/", authController.userVerification, createOrganization);
+router.delete("/", authController.userVerification, deleteOrganization);
+router.get("/", authController.userVerification, getOrganization);
+router.get("/:organizationID", authController.userVerification, getOrganizationbyID);
+
 
 function createOrganization(req, res, next){
     organizationControllers.createOrganization(req.body)
@@ -22,18 +24,18 @@ function deleteOrganization(req, res, next){
 }
 
 function getOrganization(req, res, next){
-    if(req.body.organizationID){
-        organizationControllers.getOrganization(req.body, )
-            .then( data => {
-                res.status(data.status).send(data);
-            })
-    } else {
-        organizationControllers.getAllOrganization(req.body)
-            .then( data => {
-                res.status(data.status).send(data);
-            })
-    }
+    organizationControllers.getAllOrganization(req.body)
+        .then( data => {
+            res.status(data.status).send(data);
+        })
 }
 
+function getOrganizationbyID(req, res, next){
+    req.body.organizationID = req.params.organizationID;
+    organizationControllers.getOrganization(req.body)
+        .then( data => {
+            res.status(data.status).send(data);
+        })
+}
 
 module.exports = router;

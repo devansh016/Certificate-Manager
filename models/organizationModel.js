@@ -5,6 +5,8 @@ const organizationSchema = new Schema({
     organizationID: { type: String, unique: true, required: true },
     userID: { type: String, required: true },
     organizationName: { type: String, required: true },
+    about: { type: String },
+    website: { type: String },
     verifed: { type: Boolean, default: false },
     createdDate: { type: Date, default: Date.now }
 });
