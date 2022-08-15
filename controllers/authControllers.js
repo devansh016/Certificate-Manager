@@ -41,7 +41,7 @@ async function changePassword ({ userID, password, newpassword}){
 async function userVerification(req, res, next) {
     try {
         if(!req.headers.authorization){
-            res.status(401).send({"message": "No token found."});
+            res.status(401).send({ "status": 401, "message": "No token found."});
             return;
         }
         var authorization = req.headers.authorization.split(' ')[1],decoded;
@@ -50,10 +50,10 @@ async function userVerification(req, res, next) {
         if(req.body.userID){
             next();
         }else{
-            res.status(401).send({"message":"Unauthorized User."});
+            res.status(401).send({"status": 401, "message":"Unauthorized User."});
         }
     } catch(error) {
-        res.status(400).send({"message": error.message});
+        res.status(400).send({"status": 401, "message": error.message});
     }
 }
 
