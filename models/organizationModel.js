@@ -5,9 +5,8 @@ const organizationSchema = new Schema({
     organizationID: { type: String, unique: true, required: true },
     userID: { type: String, required: true },
     organizationName: { type: String, required: true },
-    about: { type: String },
-    website: { type: String },
-    verifed: { type: Boolean, default: false },
+    organizationAbout: { type: String },
+    organizationWebsite: { type: String },
     createdDate: { type: Date, default: Date.now }
 });
 
@@ -17,10 +16,20 @@ organizationSchema.set('toJSON', {
     transform: function (doc, ret) {
         delete ret.id;
         delete ret._id;
-        delete ret.verifed;
         delete ret.createdDate;
         delete ret.userID;
     }
 });
+
+organizationSchema.methods = {
+    getOrganization: function() { 
+        return {
+            "organizationID" : this.organizationID,
+            "name": this.organizationName,
+            "about": this.organizationAbout,
+            "website": this.organizationWebsite
+        };
+    }
+}
 
 module.exports = mongoose.model('Organization', organizationSchema);
