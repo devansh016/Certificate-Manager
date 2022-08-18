@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 const organizationSchema = new Schema({
     organizationID: { type: String, unique: true, required: true },
-    userID: { type: String, required: true },
     organizationName: { type: String, required: true },
     organizationAbout: { type: String },
     organizationWebsite: { type: String },
@@ -17,7 +16,6 @@ organizationSchema.set('toJSON', {
         delete ret.id;
         delete ret._id;
         delete ret.createdDate;
-        delete ret.userID;
     }
 });
 
