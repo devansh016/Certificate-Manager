@@ -13,6 +13,8 @@ app.use("/auth", authRoutes);
 const organizationRoutes = require("./routes/organizationRoutes");
 app.use("/organization", organizationRoutes);
 
+const eventRoutes = require("./routes/eventRoutes");
+app.use("/event", eventRoutes);
 
 // Database Connection
 const connection = require("./utils/database");
