@@ -1,40 +1,69 @@
-const Organization = require("../models/organizationModel");
-const Event = require("../models/eventModel");
-const crypto = require("crypto");
+// const Organization = require("../models/organization");
+const UserOrganization = require("../models/userOrganization");
+const Event = require("../models/event");
+const { v4: uuidv4 } = require('uuid');
 
-async function creatEvent ({ organizationID, eventName }){
-    const event = new Event ({ organizationID, eventName, "eventID": crypto.randomBytes(8).toString('hex') });
-    await event.save();
-    return { "status": 200, "message": "Event Created." };
-}
-
-async function deleteOrganization ({ userID, organizationID }){
-    const organization = await Organization.findOne({ userID, organizationID });
-    if(organization){
-        await Organization.deleteOne({ userID, organizationID});
-        return { "status": 200, "message": "Organization Deleted." };
-    } else {
-        return { "status": 404, "message": "Not found." }
+async function creatEvent ({ organizationID, eventName, description }){
+    try {
+        const eventID = uuidv4();
+        const event = new Event ({ organizationID, eventName, "eventID": eventID, description });
+        await event.save();
+        return { "status": 200, "message": "Event created.", "eventID": eventID };
+    } catch (error) {
+        return { "status": 500, "message": error.message };
     }
 }
 
-async function getAllOrganization ({ userID }){
-    const organization = await Organization.find({ userID });
-    return { "status": 200, organization };
+async function getAllEvent ({ userID,  organizationID}) {
+    try {
+        // Check Access to Organization
+        const userorganization = await UserOrganization.find({ userID, organizationID});
+        if(!userorganization)
+            return { "status": 403, "message": "Not authorized for this organization." };
+        // Get Events
+        const event = await Event.find({ organizationID }, { eventID: 1, eventName: 1, description: 1});
+        return { "status": 200, "event": event };
+    } catch (error) {
+        return { "status": 500, "message": error.message };
+    }
 }
 
-async function getOrganization ({ userID, organizationID }){
-    const organization = await Organization.findOne({ userID, organizationID });
-    if(organization){
-        return { "status": 200, organization };
-    } else {
-        return { "status": 404, "message": "Not found." }
+async function getEvent ({ userID, organizationID, eventID}){
+    try {
+        // Check Access to Organization
+        const userorganization = await UserOrganization.findOne({ userID, organizationID});
+        if(!userorganization)
+            return { "status": 403, "message": "Access denied to the organization." }
+        // Get Event
+        const event = await Event.findOne({ organizationID, eventID }, { eventID: 1, eventName: 1, description: 1});
+        return { "status": 200, "event": event };
+    } catch (error) {
+        return { "status": 500, "message": error.message };
+    }
+}
+
+async function deleteEvent ({ userID, eventID }){
+    try {
+        // Check if event exists
+        const event = await Event.findOne({ eventID }, { "organizationID": 1});
+        if(!event)
+            return { "status": 404, "message": "Event not found." };
+        // Check if user has access to the event
+        const userorganization = await UserOrganization.findOne({ userID, "organizationID": event.organizationID });
+        if(!userorganization)
+            return { "status": 403, "message": "Access denied to the organization." };
+        // Delete Event
+        await Event.deleteOne({ "organizationID": event.organizationID, eventID });
+        return { "status": 200, "message": "Organization deleted." };
+    } catch (error) {
+        console.log(error);
+        return { "status": 500, "message": error.message };
     }
 }
 
 module.exports = {
-    createOrganization,
-    deleteOrganization,
-    getOrganization,
-    getAllOrganization
+    creatEvent,
+    getAllEvent,
+    getEvent,
+    deleteEvent
 }

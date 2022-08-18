@@ -1,5 +1,5 @@
-const User = require("../models/userModel");
-const crypto = require("crypto");
+const User = require("../models/user");
+const { v4: uuidv4 } = require('uuid');
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
@@ -17,7 +17,7 @@ async function register({ name, email, password }) {
         return { "status": 409, "message": "Email id " + email + " is already in use." }
     }
     else {
-        const user = new User({ "userID": crypto.randomBytes(8).toString('hex'), name, email, password });
+        const user = new User({ "userID": uuidv4(), name, email, password });
         await user.save();
         return { "status": 200, "token": user.generateToken() };
     }
