@@ -16,6 +16,12 @@ app.use("/organization", organizationRoutes);
 const eventRoutes = require("./routes/eventRoutes");
 app.use("/event", eventRoutes);
 
+const templateRoutes = require("./routes/templateRoutes");
+app.use("/template", templateRoutes);
+
+const certificateRoutes = require("./routes/certificateRoutes");
+app.use("/certificate", certificateRoutes);
+
 // Database Connection
 const connection = require("./utils/database");
 connection.on("error", console.error.bind(console, "connection error: "));

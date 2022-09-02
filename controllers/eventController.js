@@ -1,9 +1,8 @@
-// const Organization = require("../models/organization");
 const UserOrganization = require("../models/userOrganization");
 const Event = require("../models/event");
 const { v4: uuidv4 } = require('uuid');
 
-async function creatEvent ({ organizationID, eventName, description }){
+async function createEvent ({ organizationID, eventName, description }){
     try {
         const eventID = uuidv4();
         const event = new Event ({ organizationID, eventName, "eventID": eventID, description });
@@ -62,7 +61,7 @@ async function deleteEvent ({ userID, eventID }){
 }
 
 module.exports = {
-    creatEvent,
+    createEvent,
     getAllEvent,
     getEvent,
     deleteEvent

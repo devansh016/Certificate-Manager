@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const authController = require("../controllers/authControllers")
-const eventControllers = require("../controllers/eventControllers")
+const authController = require("../controllers/authController")
+const eventControllers = require("../controllers/eventController")
 
 router.post("/", authController.userVerification, createEvent);
 router.delete("/", authController.userVerification, deleteEvent);
 router.get("/", authController.userVerification, getEvent);
 
 function createEvent(req, res, next){
-    eventControllers.creatEvent(req.body)
+    eventControllers.createEvent(req.body)
         .then( data => {
             res.status(data.status).send(data);
         })
