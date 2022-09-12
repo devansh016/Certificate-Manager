@@ -9,7 +9,7 @@ async function createOrganization ({ userID, organizationName, organizationAbout
         const organization = new Organization({ "organizationID": organizationID, organizationName, organizationAbout, organizationWebsite });
         await organization.save();
         // Mapping it to user
-        const userorganization = new UserOrganization({"organizationID": organizationID, userID});
+        const userorganization = new UserOrganization({"organizationID": organizationID, "userID": userID});
         await userorganization.save();
         return { "status": 200, "message": "Organization created. " , "organizationID": organization.organizationID };
     } catch (error) {

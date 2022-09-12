@@ -8,7 +8,7 @@ const csv = require('csv-parser')
 const path = require('path')
 const { v4: uuidv4 } = require('uuid');
 
-async function createCertifcates ({ templateID, userID, CSVfile }){
+async function certificateGenerationRequest ({ templateID, userID, CSVfile }){
     try {
         // Find template
         const template = await Template.findOne({ templateID });
@@ -19,10 +19,8 @@ async function createCertifcates ({ templateID, userID, CSVfile }){
         if(!userorganization)
             return { "status": 403, "message": "Not authorized for this event." };
 
-        // Generate Certificates
-
-        folderName = path.join(__dirname, "../public/certificates/")
         // Create Directory for certificates
+        folderName = path.join(__dirname, "../public/certificates/")
         if (!fs.existsSync(folderName)){
             fs.mkdirSync(folderName);
         }
@@ -81,6 +79,6 @@ async function makeCertificate({name, email, template}){
 }
 
 module.exports = {
-    createCertifcates,
+    certificateGenerationRequest,
     makeCertificate
 }

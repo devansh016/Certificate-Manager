@@ -9,7 +9,7 @@ router.post("/", recipientHandler.csvUpload.single('recipient'), authController.
 function createCertifcates(req, res, next){
     console.log(req.file)
     req.body.CSVfile = req.file.path;
-    certificateController.createCertifcates(req.body)
+    certificateController.certificateGenerationRequest(req.body)
         .then( data => {
             res.status(data.status).send(data);
         })
